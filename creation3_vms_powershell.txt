@@ -1,0 +1,71 @@
+# Create Resource Group for VM 1 and VM 2
+New-AzResourceGroup -Name 'myRGlylla1' -Location 'Eastus'
+
+# Create Resource Group for VM 3
+New-AzResourceGroup -Name 'myRGlylla3' -Location 'Francecentral'
+
+# Create VNet and Subnet for VM 1
+$vnet1 = New-AzVirtualNetwork -ResourceGroupName 'myRGlylla1' -Name 'myVnet1' -AddressPrefix '10.0.0.0/16' -Location 'Eastus'
+$subnet1 = Add-AzVirtualNetworkSubnetConfig -Name 'mySubnet1' -AddressPrefix '10.0.1.0/24' -VirtualNetwork $vnet1
+$vnet1 | Set-AzVirtualNetwork
+
+# Create VM 1
+New-AzVm `
+    -ResourceGroupName 'myRGlylla1' `
+    -Name 'myVM1' `
+    -Location 'Eastus' `
+    -Image 'MicrosoftWindowsServer:WindowsServer:2022-datacenter-azure-edition:latest' `
+    -VirtualNetworkName 'myVnet1' `
+    -SubnetName 'mySubnet1' `
+    -SecurityGroupName 'myNetworkSecurityGroup1' `
+    -PublicIpAddressName 'myPublicIpAddress1' `
+    -OpenPorts 80,3389
+
+# Create VNet and Subnet for VM 2
+$vnet2 = New-AzVirtualNetwork -ResourceGroupName 'myRGlylla1' -Name 'myVnet2' -AddressPrefix '10.1.0.0/16' -Location 'Westus'
+$subnet2 = Add-AzVirtualNetworkSubnetConfig -Name 'mySubnet2' -AddressPrefix '10.1.1.0/24' -VirtualNetwork $vnet2
+$vnet2 | Set-AzVirtualNetwork
+
+# Create VM 2
+New-AzVm `
+    -ResourceGroupName 'myRGlylla1' `
+    -Name 'myVM2' `
+    -Location 'Westus' `
+    -Image 'MicrosoftWindowsServer:WindowsServer:2022-datacenter-azure-edition:latest' `
+    -VirtualNetworkName 'myVnet2' `
+    -SubnetName 'mySubnet2' `
+    -SecurityGroupName 'myNetworkSecurityGroup2' `
+    -PublicIpAddressName 'myPublicIpAddress2' `
+    -OpenPorts 80,3389
+
+# Create VNet and Subnet for VM 3
+$vnet3 = New-AzVirtualNetwork -ResourceGroupName 'myRGlylla3' -Name 'myVnet3' -AddressPrefix '10.2.0.0/16' -Location 'Francecentral'
+$subnet3 = Add-AzVirtualNetworkSubnetConfig -Name 'mySubnet3' -AddressPrefix '10.2.1.0/24' -VirtualNetwork $vnet3
+$vnet3 | Set-AzVirtualNetwork
+
+# Create VM 3
+New-AzVm `
+    -ResourceGroupName 'myRGlylla3' `
+    -Name 'myVM3' `
+    -Location 'Francecentral' `
+    -Image 'MicrosoftWindowsServer:WindowsServer:2022-datacenter-azure-edition:latest' `
+    -VirtualNetworkName 'myVnet3' `
+    -SubnetName 'mySubnet3' `
+    -SecurityGroupName 'myNetworkSecurityGroup3' `
+    -PublicIpAddressName 'myPublicIpAddress3' `
+    -OpenPorts 80,3389
+
+
+..................................................
+
+# Remove Resource Group for VM 1 and VM 2
+Remove-AzResourceGroup -Name 'myRGlylla1' -Force
+
+# Remove Resource Group for VM 3
+Remove-AzResourceGroup -Name 'myRGlylla3' -Force
+
+
+10.0.1.4
+10.1.1.4
+
+10.2.1.4
