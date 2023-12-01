@@ -1,1 +1,36 @@
+# Create Resource Group for VMs
+New-AzResourceGroup -Name 'myRGlylla' -Location 'Francecentral'
+
+# Create VNet and Subnet 1
+$vnet = New-AzVirtualNetwork -ResourceGroupName 'myRGlylla' -Name 'myVnet' -AddressPrefix '10.0.0.0/16' -Location 'Francecentral'
+$subnet1 = Add-AzVirtualNetworkSubnetConfig -Name 'Subnet1' -AddressPrefix '10.0.1.0/24' -VirtualNetwork $vnet
+$vnet | Set-AzVirtualNetwork
+
+# Create VM in Subnet 1
+New-AzVm `
+    -ResourceGroupName 'myRGlylla' `
+    -Name 'myVM1' `
+    -Location 'Francecentral' `
+    -Image 'MicrosoftWindowsServer:WindowsServer:2022-datacenter-azure-edition:latest' `
+    -VirtualNetworkName 'myVnet' `
+    -SubnetName 'Subnet1' `
+    -SecurityGroupName 'myNetworkSecurityGroup1' `
+    -PublicIpAddressName 'myPublicIpAddress1' `
+    -OpenPorts 80,3389
+
+# Create Subnet 2
+$subnet2 = Add-AzVirtualNetworkSubnetConfig -Name 'Subnet2' -AddressPrefix '10.0.2.0/24' -VirtualNetwork $vnet
+$vnet | Set-AzVirtualNetwork
+
+# Create VM in Subnet 2
+New-AzVm `
+    -ResourceGroupName 'myRGlylla' `
+    -Name 'myVM2' `
+    -Location 'Francecentral' `
+    -Image 'MicrosoftWindowsServer:WindowsServer:2022-datacenter-azure-edition:latest' `
+    -VirtualNetworkName 'myVnet' `
+    -SubnetName 'Subnet2' `
+    -SecurityGroupName 'myNetworkSecurityGroup2' `
+    -PublicIpAddressName 'myPublicIpAddress2' `
+    -OpenPorts 80,3389
 
