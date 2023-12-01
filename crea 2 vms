@@ -7,11 +7,6 @@ $subnet1 = Add-AzVirtualNetworkSubnetConfig -Name 'Subnet1' -AddressPrefix '10.0
 $vnet | Set-AzVirtualNetwork
 
 # Create VM in Subnet 1
-New-AzVm `
-    -ResourceGroupName 'myRGlylla' `
-    -Name 'myVM1' `
-    -Location 'Francecentral' `
-    -Image 'MicrosoftWindowsServer:WindowsServer:2022-datacenter-azure-edition:latest' `
     -VirtualNetworkName 'myVnet' `
     -SubnetName 'Subnet1' `
     -SecurityGroupName 'myNetworkSecurityGroup1' `
@@ -19,6 +14,11 @@ New-AzVm `
     -OpenPorts 80,3389
 
 # Create Subnet 2
+New-AzVm `
+    -ResourceGroupName 'myRGlylla' `
+    -Name 'myVM1' `
+    -Location 'Francecentral' `
+    -Image 'MicrosoftWindowsServer:WindowsServer:2022-datacenter-azure-edition:latest' `
 $subnet2 = Add-AzVirtualNetworkSubnetConfig -Name 'Subnet2' -AddressPrefix '10.0.2.0/24' -VirtualNetwork $vnet
 $vnet | Set-AzVirtualNetwork
 
@@ -30,7 +30,7 @@ New-AzVm `
     -Image 'MicrosoftWindowsServer:WindowsServer:2022-datacenter-azure-edition:latest' `
     -VirtualNetworkName 'myVnet' `
     -SubnetName 'Subnet2' `
-    -SecurityGroupName 'myNetworkSecurityGroup2' `
+    -SecurityGroupName 'myNetworkSecurityGroup1' `
     -PublicIpAddressName 'myPublicIpAddress2' `
     -OpenPorts 80,3389
 
